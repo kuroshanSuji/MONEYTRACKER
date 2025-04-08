@@ -4,21 +4,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Builder
+import java.sql.Date;
+
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-public class User {
+public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private Integer userid;
-    private String name;
-    private String email;
-    private String password;
+    private Integer eid;
+    private Date date;
+    private Double amt;
+    private ExpenseType expenseType;
 }

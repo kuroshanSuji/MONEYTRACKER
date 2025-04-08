@@ -23,6 +23,8 @@ public class UserController {
         if(userService.chckCredential(registration))
         {
             userService.addUser(registration);
+        }else{
+            log.info("user already present");
         }
 
     }
