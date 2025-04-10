@@ -17,17 +17,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean chckCredential(@Valid Registration registration) {
+    public boolean chckCredential(Registration registration) {
         return userRepository.findByEmail(registration.getEmail()) == null;
     }
 
-    public void addUser(@Valid Registration registration) {
+    public void addUser(Registration registration) {
          User newUser=registration.toUser();
          userRepository.save(newUser);
          log.info(newUser.getName());
     }
 
-    public void updateUserInfo(@Valid UserInfoUpdate userInfoUpdate) {
+    public void updateUserInfo(UserInfoUpdate userInfoUpdate) {
         /* in this method we need to update the user info present in the db ( should not delete the info
            just update the info)*/
             Optional<User> optional=userRepository.findById(userInfoUpdate.getUserId());
@@ -52,4 +52,5 @@ public class UserService {
             }
             // here we need to update the exception case
     }
+
 }
