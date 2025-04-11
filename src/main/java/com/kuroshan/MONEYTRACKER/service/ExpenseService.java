@@ -1,5 +1,8 @@
 package com.kuroshan.MONEYTRACKER.service;
 
+import com.kuroshan.MONEYTRACKER.exception.ExpenseNotAddedException;
+import com.kuroshan.MONEYTRACKER.exception.ExpenseNotPresentException;
+import com.kuroshan.MONEYTRACKER.exception.NoExpenseFoundException;
 import com.kuroshan.MONEYTRACKER.model.Expense;
 import com.kuroshan.MONEYTRACKER.repository.ExpenseRepository;
 import com.kuroshan.MONEYTRACKER.request.ExpenseAddReq;
@@ -21,8 +24,11 @@ public class ExpenseService {
     private ExpenseRepository expenseRepository;
 
     public void addExpense( ExpenseAddReq expenseAddReq) {
-        Expense expense=expenseAddReq.toExpense();
+        try{Expense expense=expenseAddReq.toExpense();
         expenseRepository.save(expense);
+        } catch (Exception e) {
+            throw ExpenseNotAddedException.builder().expenseAddReq(expenseAddReq).build();
+        }
     }
 
     public void updateExpenses( ExpenseUpdateReq expenseUpdateReq) {
@@ -43,12 +49,18 @@ public class ExpenseService {
                 existingExpense.setExpenseType(expenseUpdateReq.getExpenseType());
             }
             expenseRepository.save(existingExpense);
+        }else{
+            throw ExpenseNotPresentException.builder().expenseUpdateReq(expenseUpdateReq).build();
         }
     }
 
     public void deleteExpense(ExpenseDeleteReq expenseDeleteReq)
     {
-        expenseRepository.deleteById(expenseDeleteReq.getExpId());
+        try{
+            expenseRepository.deleteById(expenseDeleteReq.getExpId());
+        } catch (Exception e) {
+            throw ExpenseNotDeletedException.builder().expenseDeleteReq(expenseDeleteReq).build();
+        }
     }
 
     public void getExpenses(ExpenseGetReq expenseGetReq)
@@ -82,6 +94,9 @@ public class ExpenseService {
         }else {
             List<Expense> expenseList = expenseRepository.findByExpenseTypeIn(expenseGetReq.getExpenseType());
         }
+        // if not found, in any of the above
+            // then need to throw exception
+        throw NoExpenseFoundException.builder().expenseGetReq(expenseGetReq).build();
     }
 
     public long toLong(String date)

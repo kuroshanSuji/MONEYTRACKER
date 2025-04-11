@@ -1,5 +1,6 @@
 package com.kuroshan.MONEYTRACKER.controller;
 
+import com.kuroshan.MONEYTRACKER.exception.UserAlreadyPresentException;
 import com.kuroshan.MONEYTRACKER.request.Registration;
 import com.kuroshan.MONEYTRACKER.request.UserInfoUpdate;
 import com.kuroshan.MONEYTRACKER.service.UserService;
@@ -25,6 +26,7 @@ public class UserController {
             userService.addUser(registration);
         }else{
             log.info("user already present");
+            throw UserAlreadyPresentException.builder().registration(registration).build();
         }
 
     }

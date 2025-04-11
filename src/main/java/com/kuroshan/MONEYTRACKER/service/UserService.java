@@ -1,5 +1,7 @@
 package com.kuroshan.MONEYTRACKER.service;
 
+import com.kuroshan.MONEYTRACKER.exception.UserNotAddedException;
+import com.kuroshan.MONEYTRACKER.exception.UserNotFoundException;
 import com.kuroshan.MONEYTRACKER.model.User;
 import com.kuroshan.MONEYTRACKER.repository.UserRepository;
 import com.kuroshan.MONEYTRACKER.request.Registration;
@@ -22,35 +24,38 @@ public class UserService {
     }
 
     public void addUser(Registration registration) {
-         User newUser=registration.toUser();
+        try{ User newUser=registration.toUser();
          userRepository.save(newUser);
          log.info(newUser.getName());
+        }catch (Exception e){
+            throw UserNotAddedException.builder().registration(registration).build();
+        }
     }
 
     public void updateUserInfo(UserInfoUpdate userInfoUpdate) {
         /* in this method we need to update the user info present in the db ( should not delete the info
            just update the info)*/
             Optional<User> optional=userRepository.findById(userInfoUpdate.getUserId());
-            if(optional.isPresent())
-            {
-                 User existingUser=optional.get();
-                if(userInfoUpdate.getPassword()!=null)
+                if(optional.isPresent())
                 {
-                    existingUser.setPassword(userInfoUpdate.getPassword());
+                    User existingUser=optional.get();
+                    if(userInfoUpdate.getPassword()!=null)
+                    {
+                        existingUser.setPassword(userInfoUpdate.getPassword());
+                    }
+                    if(userInfoUpdate.getName()!=null)
+                    {
+                        existingUser.setName(userInfoUpdate.getName());
+                    }
+                    if(userInfoUpdate.getEmail()!=null)
+                    {
+                        existingUser.setEmail(userInfoUpdate.getEmail());
+                    }
+                    userRepository.save(existingUser);
+                    // this save method , chck whether the data already present in the database if yes,
+                    // it will update the info , it will not save another data.
+                }else {
+                    throw UserNotFoundException.builder().userId(userInfoUpdate.getUserId()).build();
                 }
-                if(userInfoUpdate.getName()!=null)
-                {
-                    existingUser.setName(userInfoUpdate.getName());
-                }
-                if(userInfoUpdate.getEmail()!=null)
-                {
-                    existingUser.setEmail(userInfoUpdate.getEmail());
-                }
-                userRepository.save(existingUser);
-                // this save method , chck whether the data already present in the database if yes, 
-                 // it will update the info , it will not save another data.
-            }
-            // here we need to update the exception case
     }
-
 }
