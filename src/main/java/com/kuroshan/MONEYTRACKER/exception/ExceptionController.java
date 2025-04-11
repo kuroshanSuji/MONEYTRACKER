@@ -1,5 +1,8 @@
 package com.kuroshan.MONEYTRACKER.exception;
 
+import com.kuroshan.MONEYTRACKER.response.GenericResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -7,37 +10,37 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionController{
 
     @ExceptionHandler(UserNotFoundException.class)
-    public void userNotFoundException(UserNotFoundException userNotFoundException)
+    public GenericResponse<?> userNotFoundException(UserNotFoundException userNotFoundException)
     {
-
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(userNotFoundException).build();
     }
 
     @ExceptionHandler(ExpenseNotAddedException.class)
-    public void expenseNotAddedException(ExpenseNotAddedException expenseNotAddedException){
-
+    public GenericResponse<?> expenseNotAddedException(ExpenseNotAddedException expenseNotAddedException){
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(expenseNotAddedException).build();
     }
 
     @ExceptionHandler(ExpenseNotDeletedException.class)
-    public void expenseNotDeletedException(ExpenseNotDeletedException expenseNotDeletedException){
-
+    public GenericResponse<?> expenseNotDeletedException(ExpenseNotDeletedException expenseNotDeletedException){
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(expenseNotDeletedException).build();
     }
 
     @ExceptionHandler(ExpenseNotPresentException.class)
-    public void expenseNotPresentException(ExpenseNotPresentException expenseNotPresentException){
-
+    public GenericResponse<?> expenseNotPresentException(ExpenseNotPresentException expenseNotPresentException){
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(expenseNotPresentException).build();
     }
 
     @ExceptionHandler(NoExpenseFoundException.class)
-    public void noExpenseFoundException(NoExpenseFoundException noExpenseFoundException){
-
+    public GenericResponse<?> noExpenseFoundException(NoExpenseFoundException noExpenseFoundException){
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(noExpenseFoundException).build();
     }
     @ExceptionHandler(UserAlreadyPresentException.class)
-    public void userAlreadyPresentException(UserAlreadyPresentException userAlreadyPresentException){
-
+    public GenericResponse<?> userAlreadyPresentException(UserAlreadyPresentException userAlreadyPresentException){
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(userAlreadyPresentException).build();
     }
 
     @ExceptionHandler(UserNotAddedException.class)
-    public void userNotAddedException(UserNotAddedException userNotAddedException){
-
+    public GenericResponse<?> userNotAddedException(UserNotAddedException userNotAddedException){
+        return GenericResponse.builder().httpStatusCode(HttpStatusCode.valueOf(400)).httpStatus(HttpStatus.BAD_REQUEST).object(userNotAddedException).build();
     }
 }

@@ -6,9 +6,12 @@ import com.kuroshan.MONEYTRACKER.model.User;
 import com.kuroshan.MONEYTRACKER.repository.UserRepository;
 import com.kuroshan.MONEYTRACKER.request.Registration;
 import com.kuroshan.MONEYTRACKER.request.UserInfoUpdate;
+import com.kuroshan.MONEYTRACKER.response.GenericResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,16 +26,19 @@ public class UserService {
         return userRepository.findByEmail(registration.getEmail()) == null;
     }
 
-    public void addUser(Registration registration) {
-        try{ User newUser=registration.toUser();
-         userRepository.save(newUser);
-         log.info(newUser.getName());
-        }catch (Exception e){
+    public GenericResponse<?> addUser(Registration registration) {
+        User newUser;
+        try {
+            newUser = registration.toUser();
+            userRepository.save(newUser);
+            log.info(newUser.getName());
+        } catch (Exception e) {
             throw UserNotAddedException.builder().registration(registration).build();
         }
+        return GenericResponse.builder().httpStatusCode(HttpStatus.valueOf(200)).httpStatus(HttpStatus.CREATED).object(newUser).build();
     }
 
-    public void updateUserInfo(UserInfoUpdate userInfoUpdate) {
+    public GenericResponse<?> updateUserInfo(UserInfoUpdate userInfoUpdate) {
         /* in this method we need to update the user info present in the db ( should not delete the info
            just update the info)*/
             Optional<User> optional=userRepository.findById(userInfoUpdate.getUserId());
@@ -57,5 +63,6 @@ public class UserService {
                 }else {
                     throw UserNotFoundException.builder().userId(userInfoUpdate.getUserId()).build();
                 }
+                return GenericResponse.builder().httpStatus(HttpStatus.ACCEPTED).httpStatusCode(HttpStatusCode.valueOf(200)).build();
     }
 }
