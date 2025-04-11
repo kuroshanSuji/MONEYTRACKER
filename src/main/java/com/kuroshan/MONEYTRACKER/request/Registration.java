@@ -2,9 +2,11 @@ package com.kuroshan.MONEYTRACKER.request;
 
 import com.kuroshan.MONEYTRACKER.model.User;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter // getter here is must
+@Builder
 public class Registration {
     @NotBlank(message = "name should not be blank")
     private String name;
